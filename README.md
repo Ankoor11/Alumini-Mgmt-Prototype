@@ -66,7 +66,7 @@ alumni_mgt/
 
 1. **Clone and navigate to the project**
    ```bash
-   cd alumni_mgt
+   cd Alumini-Mgmt-Prototype
    ```
 
 2. **Install root dependencies**

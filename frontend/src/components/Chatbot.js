@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -18,6 +18,16 @@ const Chatbot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Memoize the greeting message function to avoid useEffect warning
+  const getGreetingMessage = useCallback(() => {
+    const userName = user ? `${user.firstName}` : 'there';
+    
+    // Using 'Hello' instead of time-based greetings, simplified without titles
+    const greeting = 'Hello';
+    
+    return `${greeting} ${userName}, greetings of the day!`;
+  }, [user]);
 
   // Initialize chatbot with greeting message when opened
   useEffect(() => {
@@ -42,24 +52,7 @@ const Chatbot = () => {
 
       return () => clearTimeout(greetingTimeout);
     }
-  }, [isOpen, messages.length]);
-
-  const getGreetingMessage = () => {
-    const currentHour = new Date().getHours();
-    const userName = user ? `${user.firstName}` : 'there';
-    const title = user ? (user.role === 'student' ? 'Student' : user.role === 'alumni' ? 'Sir/Madam' : 'Sir/Madam') : 'Sir/Madam';
-    
-    let greeting = '';
-    if (currentHour < 12) {
-      greeting = 'Good morning';
-    } else if (currentHour < 17) {
-      greeting = 'Good afternoon';
-    } else {
-      greeting = 'Good evening';
-    }
-
-    return `${greeting} ${title} ${userName}, greetings of the day!`;
-  };
+  }, [isOpen, messages.length, getGreetingMessage]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();

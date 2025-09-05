@@ -37,11 +37,11 @@ function App() {
       <main className={user ? 'pt-16' : ''}>
         <Routes>
           {/* Role Selection and Login Routes */}
-          <Route path="/role-select" element={!user ? <RoleSelection /> : <Navigate to="/dashboard" />} />
-          <Route path="/student-login" element={!user ? <StudentLogin /> : <Navigate to="/dashboard" />} />
-          <Route path="/alumni-login" element={!user ? <AlumniLogin /> : <Navigate to="/dashboard" />} />
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+          <Route path="/role-select" element={!user ? <RoleSelection key="role-select" /> : <Navigate to="/dashboard" />} />
+          <Route path="/student-login" element={!user ? <StudentLogin key="student-login" /> : <Navigate to="/dashboard" />} />
+          <Route path="/alumni-login" element={!user ? <AlumniLogin key="alumni-login" /> : <Navigate to="/dashboard" />} />
+          <Route path="/login" element={!user ? <Login key="login" /> : <Navigate to="/dashboard" />} />
+          <Route path="/register" element={!user ? <Register key="register" /> : <Navigate to="/dashboard" />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/role-select" />} />

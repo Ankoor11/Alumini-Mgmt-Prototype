@@ -84,10 +84,27 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Clear all authentication-related data
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
+    
+    // Clear any form data that might be cached in browser
+    // Force clear any autofill or stored form data
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+      if (form && typeof form.reset === 'function') {
+        form.reset();
+      }
+    });
+    
+    // Clear any input elements that might have cached values
+    const inputs = document.querySelectorAll('input[type="email"], input[type="password"]');
+    inputs.forEach(input => {
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
   };
 
   const updateProfile = async (profileData) => {

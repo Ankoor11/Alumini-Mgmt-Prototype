@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -12,6 +12,15 @@ const AlumniLogin = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
+
+  // Clear form data on component mount to ensure fresh login form
+  useEffect(() => {
+    setFormData({
+      email: '',
+      password: ''
+    });
+    setError('');
+  }, []);
 
   const handleChange = (e) => {
     setFormData({

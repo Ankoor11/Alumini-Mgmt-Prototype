@@ -75,9 +75,21 @@ alumni_mgt/
    ```
 
 3. **Setup environment variables**
+   
+   **Backend Environment Setup:**
    ```bash
    cd backend
-   # Edit .env with your configuration (MongoDB URI, JWT secret, etc.)
+   # Create .env file with your configuration
+   cp .env.example .env
+   # Edit .env with your MongoDB URI, JWT secret, etc.
+   ```
+   
+   **Frontend Environment Setup:**
+   ```bash
+   cd frontend
+   # Create .env file from template
+   cp .env.example .env
+   # Edit .env with your API URL and other settings
    ```
 
 4. **Start MongoDB**
@@ -145,6 +157,10 @@ Get admin dashboard statistics (admin only).
 
 ### Environment Variables
 
+The application requires environment variables for both frontend and backend.
+
+#### Backend Environment Variables
+
 Create a `.env` file in the backend directory:
 
 ```env
@@ -156,6 +172,67 @@ FRONTEND_URL=http://localhost:3000
 EMAIL_USER=your-email@example.com
 EMAIL_PASS=your-email-password
 ```
+
+#### Frontend Environment Variables
+
+Create a `.env` file in the frontend directory:
+
+```env
+# React App Configuration
+REACT_APP_API_URL=http://localhost:5000/api
+
+# Optional: Theme Configuration
+REACT_APP_DEFAULT_THEME=light
+
+# Optional: Application Settings
+REACT_APP_APP_NAME=AlumniConnect
+REACT_APP_VERSION=1.0.0
+
+# Optional: Analytics (uncomment and configure if needed)
+# REACT_APP_GOOGLE_ANALYTICS_ID=your-google-analytics-id
+# REACT_APP_SENTRY_DSN=your-sentry-dsn-url
+```
+
+#### Environment Setup Commands
+
+```bash
+# Setup backend environment
+cd backend
+cp .env.example .env
+# Edit backend/.env with your values
+
+# Setup frontend environment
+cd frontend
+cp .env.example .env
+# Edit frontend/.env with your values
+```
+
+#### Important Notes:
+- Never commit `.env` files to version control
+- Always use `.env.example` files as templates
+- Update API URLs when deploying to production
+- Generate strong JWT secrets for production
+
+#### Git Commands for .env Files
+
+If you accidentally committed `.env` files, use these commands to remove them from git tracking:
+
+```bash
+# Remove .env from git tracking (keeps local file)
+git rm --cached frontend/.env
+git rm --cached backend/.env
+
+# Add changes to git
+git add .gitignore
+
+# Commit the changes
+git commit -m "Remove .env files from tracking and update .gitignore"
+
+# Push changes
+git push origin main
+```
+
+**Note**: After running these commands, your `.env` files will remain on your local machine but will no longer be tracked by git.
 
 ## 🧪 Testing
 

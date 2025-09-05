@@ -1,7 +1,12 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
+import { useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
+import Chatbot from './components/Chatbot';
+import RoleSelection from './pages/RoleSelection';
+import StudentLogin from './pages/StudentLogin';
+import AlumniLogin from './pages/AlumniLogin';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -14,6 +19,7 @@ import './App.css';
 
 function App() {
   const { user, loading } = useAuth();
+  const { theme } = useTheme();
 
   if (loading) {
     return (
@@ -24,21 +30,34 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen theme-container transition-all duration-300 ${
+      user?.role === 'student' ? 'student-theme' : user?.role === 'alumni' ? 'alumni-theme' : 'admin-theme'
+    }`}>
       {user && <Navbar />}
       <main className={user ? 'pt-16' : ''}>
         <Routes>
+          {/* Role Selection and Login Routes */}
+          <Route path="/role-select" element={!user ? <RoleSelection /> : <Navigate to="/dashboard" />} />
+          <Route path="/student-login" element={!user ? <StudentLogin /> : <Navigate to="/dashboard" />} />
+          <Route path="/alumni-login" element={!user ? <AlumniLogin /> : <Navigate to="/dashboard" />} />
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
           <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
-          <Route path="/directory" element={user ? <AlumniDirectory /> : <Navigate to="/login" />} />
-          <Route path="/events" element={user ? <Events /> : <Navigate to="/login" />} />
-          <Route path="/mentorship" element={user ? <Mentorship /> : <Navigate to="/login" />} />
-          <Route path="/admin" element={user ? <AdminDashboard /> : <Navigate to="/login" />} />
-          <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+          
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/role-select" />} />
+          <Route path="/profile" element={user ? <Profile /> : <Navigate to="/role-select" />} />
+          <Route path="/directory" element={user ? <AlumniDirectory /> : <Navigate to="/role-select" />} />
+          <Route path="/events" element={user ? <Events /> : <Navigate to="/role-select" />} />
+          <Route path="/mentorship" element={user ? <Mentorship /> : <Navigate to="/role-select" />} />
+          <Route path="/admin" element={user && user.role === 'admin' ? <AdminDashboard /> : <Navigate to="/role-select" />} />
+          
+          {/* Default Route */}
+          <Route path="/" element={<Navigate to={user ? "/dashboard" : "/role-select"} />} />
         </Routes>
       </main>
+      
+      {/* Chatbot - only show for logged in users */}
+      {user && <Chatbot />}
     </div>
   );
 }

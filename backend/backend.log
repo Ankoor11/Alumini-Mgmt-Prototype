@@ -1,0 +1,59 @@
+nohup: ignoring input
+
+> alumni-backend@1.0.0 start
+> node src/app.js
+
+Server running on port 5000
+MongoDB connected
+Login error: Error: User validation failed: currentPosition: Path `currentPosition` is required.
+    at ValidationError.inspect (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/error/validation.js:50:26)
+    at formatValue (node:internal/util/inspect:877:19)
+    at inspect (node:internal/util/inspect:404:10)
+    at formatWithOptionsInternal (node:internal/util/inspect:2407:40)
+    at formatWithOptions (node:internal/util/inspect:2269:10)
+    at console.value (node:internal/console/constructor:345:14)
+    at console.error (node:internal/console/constructor:412:61)
+    at login (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/src/controllers/authController.js:163:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  errors: {
+    currentPosition: ValidatorError: Path `currentPosition` is required.
+        at validate (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/schematype.js:1365:13)
+        at SchemaType.doValidate (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/schematype.js:1349:7)
+        at /home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/document.js:3004:18
+        at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+      properties: [Object],
+      kind: 'required',
+      path: 'currentPosition',
+      value: '',
+      reason: undefined,
+      [Symbol(mongoose:validatorError)]: true
+    }
+  },
+  _message: 'User validation failed'
+}
+Login error: Error: User validation failed: currentPosition: Path `currentPosition` is required.
+    at ValidationError.inspect (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/error/validation.js:50:26)
+    at formatValue (node:internal/util/inspect:877:19)
+    at inspect (node:internal/util/inspect:404:10)
+    at formatWithOptionsInternal (node:internal/util/inspect:2407:40)
+    at formatWithOptions (node:internal/util/inspect:2269:10)
+    at console.value (node:internal/console/constructor:345:14)
+    at console.error (node:internal/console/constructor:412:61)
+    at login (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/src/controllers/authController.js:163:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  errors: {
+    currentPosition: ValidatorError: Path `currentPosition` is required.
+        at validate (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/schematype.js:1365:13)
+        at SchemaType.doValidate (/home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/schematype.js:1349:7)
+        at /home/ankoor11/alumni_mgt/Alumini-Mgmt-Prototype/backend/node_modules/mongoose/lib/document.js:3004:18
+        at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+      properties: [Object],
+      kind: 'required',
+      path: 'currentPosition',
+      value: '',
+      reason: undefined,
+      [Symbol(mongoose:validatorError)]: true
+    }
+  },
+  _message: 'User validation failed'
+}

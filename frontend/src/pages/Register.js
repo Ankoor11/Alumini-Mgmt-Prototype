@@ -3,16 +3,21 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Register = () => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'student',
     graduationYear: '',
     department: '',
+    // Alumni-specific fields
     currentPosition: '',
-    company: ''
+    company: '',
+    // Student-specific fields
+    currentYear: '',
+    rollNumber: ''
   });
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
@@ -57,6 +62,15 @@ const Register = () => {
     }
     if (!formData.department.trim()) errors.department = 'Department is required';
     
+    // Role-specific validation
+    if (formData.role === 'alumni') {
+      if (!formData.currentPosition.trim()) errors.currentPosition = 'Current position is required for alumni';
+      if (!formData.company.trim()) errors.company = 'Company is required for alumni';
+    } else if (formData.role === 'student') {
+      if (!formData.currentYear) errors.currentYear = 'Current year is required for students';
+      if (!formData.rollNumber.trim()) errors.rollNumber = 'Roll number is required for students';
+    }
+    
     return errors;
   };
 
@@ -73,16 +87,27 @@ const Register = () => {
 
     setLoading(true);
 
-    const result = await register({
+    // Prepare submission data based on role
+    const submissionData = {
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.trim(),
       password: formData.password,
+      role: formData.role,
       graduationYear: parseInt(formData.graduationYear),
-      department: formData.department.trim(),
-      currentPosition: formData.currentPosition.trim(),
-      company: formData.company.trim()
-    });
+      department: formData.department.trim()
+    };
+
+    // Add role-specific fields
+    if (formData.role === 'alumni') {
+      submissionData.currentPosition = formData.currentPosition.trim();
+      submissionData.company = formData.company.trim();
+    } else if (formData.role === 'student') {
+      submissionData.currentYear = parseInt(formData.currentYear);
+      submissionData.rollNumber = formData.rollNumber.trim();
+    }
+
+    const result = await register(submissionData);
 
     if (!result.success) {
       // Parse backend validation errors
@@ -175,6 +200,28 @@ const Register = () => {
           </div>
 
           <div>
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+              I am a <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="role"
+              name="role"
+              required
+              className={`appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                fieldErrors.role ? 'border-red-500' : 'border-gray-300'
+              }`}
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="student">Current Student</option>
+              <option value="alumni">Alumni/Graduate</option>
+            </select>
+            {fieldErrors.role && (
+              <p className="mt-1 text-sm text-red-600">{fieldErrors.role}</p>
+            )}
+          </div>
+
+          <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email Address <span className="text-red-500">*</span>
             </label>
@@ -240,35 +287,103 @@ const Register = () => {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="currentPosition" className="block text-sm font-medium text-gray-700 mb-1">
-              Current Position <span className="text-gray-400">(optional)</span>
-            </label>
-            <input
-              id="currentPosition"
-              name="currentPosition"
-              type="text"
-              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="e.g. Software Engineer"
-              value={formData.currentPosition}
-              onChange={handleChange}
-            />
-          </div>
+          {/* Role-specific fields */}
+          {formData.role === 'alumni' ? (
+            <>
+              <div>
+                <label htmlFor="currentPosition" className="block text-sm font-medium text-gray-700 mb-1">
+                  Current Position <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="currentPosition"
+                  name="currentPosition"
+                  type="text"
+                  required
+                  className={`appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                    fieldErrors.currentPosition ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="e.g. Software Engineer"
+                  value={formData.currentPosition}
+                  onChange={handleChange}
+                />
+                {fieldErrors.currentPosition && (
+                  <p className="mt-1 text-sm text-red-600">{fieldErrors.currentPosition}</p>
+                )}
+              </div>
 
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-              Company <span className="text-gray-400">(optional)</span>
-            </label>
-            <input
-              id="company"
-              name="company"
-              type="text"
-              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="e.g. Google, Microsoft"
-              value={formData.company}
-              onChange={handleChange}
-            />
-          </div>
+              <div>
+                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                  Company <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  required
+                  className={`appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                    fieldErrors.company ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="e.g. Google, Microsoft"
+                  value={formData.company}
+                  onChange={handleChange}
+                />
+                {fieldErrors.company && (
+                  <p className="mt-1 text-sm text-red-600">{fieldErrors.company}</p>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="currentYear" className="block text-sm font-medium text-gray-700 mb-1">
+                    Current Year <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="currentYear"
+                    name="currentYear"
+                    required
+                    className={`appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                      fieldErrors.currentYear ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    value={formData.currentYear}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Year</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                    <option value="5">5th Year</option>
+                    <option value="6">6th Year</option>
+                  </select>
+                  {fieldErrors.currentYear && (
+                    <p className="mt-1 text-sm text-red-600">{fieldErrors.currentYear}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="rollNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                    Roll Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="rollNumber"
+                    name="rollNumber"
+                    type="text"
+                    required
+                    className={`appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                      fieldErrors.rollNumber ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="e.g. 2021CS001"
+                    value={formData.rollNumber}
+                    onChange={handleChange}
+                  />
+                  {fieldErrors.rollNumber && (
+                    <p className="mt-1 text-sm text-red-600">{fieldErrors.rollNumber}</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">

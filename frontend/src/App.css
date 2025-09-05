@@ -1,4 +1,68 @@
 /* Custom styles for the alumni management system */
+/* Theme variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --accent-primary: #2563eb;
+  --accent-hover: #1d4ed8;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+}
+
+/* Dark theme variables */
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --border-primary: #475569;
+  --border-secondary: #64748b;
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+/* Base theme classes */
+.theme-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Role-based accent colors */
+.student-theme {
+  --role-accent: #059669; /* Green for students */
+  --role-accent-hover: #047857;
+  --role-gradient: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.alumni-theme {
+  --role-accent: #7c3aed; /* Purple for alumni */
+  --role-accent-hover: #6d28d9;
+  --role-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.admin-theme {
+  --role-accent: #dc2626; /* Red for admin */
+  --role-accent-hover: #b91c1c;
+  --role-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
 
 .navbar-brand {
   font-weight: 700;

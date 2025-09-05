@@ -25,8 +25,18 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['alumni', 'admin'],
-    default: 'alumni'
+    enum: ['student', 'alumni', 'admin'],
+    default: 'student'
+  },
+  studentId: {
+    type: String,
+    unique: true,
+    sparse: true // allows null values while maintaining uniqueness for non-null values
+  },
+  alumniId: {
+    type: String,
+    unique: true,
+    sparse: true // allows null values while maintaining uniqueness for non-null values
   },
   graduationYear: {
     type: Number,
@@ -37,13 +47,28 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  // Alumni-specific fields
   currentPosition: {
     type: String,
-    trim: true
+    trim: true,
+    required: function() { return this.role === 'alumni'; }
   },
   company: {
     type: String,
-    trim: true
+    trim: true,
+    required: function() { return this.role === 'alumni'; }
+  },
+  // Student-specific fields
+  currentYear: {
+    type: Number,
+    min: 1,
+    max: 6,
+    required: function() { return this.role === 'student'; }
+  },
+  rollNumber: {
+    type: String,
+    trim: true,
+    required: function() { return this.role === 'student'; }
   },
   bio: {
     type: String,
@@ -102,8 +127,24 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Update the updatedAt field before saving
-userSchema.pre('save', function(next) {
+// Generate IDs before saving
+userSchema.pre('save', async function(next) {
+  // Generate Student ID for students
+  if (this.role === 'student' && !this.studentId) {
+    const year = new Date().getFullYear();
+    const dept = this.department.substring(0, 3).toUpperCase();
+    const count = await mongoose.model('User').countDocuments({ role: 'student' });
+    this.studentId = `STU${year}${dept}${String(count + 1).padStart(4, '0')}`;
+  }
+  
+  // Generate Alumni ID for alumni
+  if (this.role === 'alumni' && !this.alumniId) {
+    const gradYear = this.graduationYear;
+    const dept = this.department.substring(0, 3).toUpperCase();
+    const count = await mongoose.model('User').countDocuments({ role: 'alumni' });
+    this.alumniId = `ALU${gradYear}${dept}${String(count + 1).padStart(4, '0')}`;
+  }
+  
   this.updatedAt = new Date();
   next();
 });

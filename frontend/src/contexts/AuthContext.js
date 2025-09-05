@@ -1,11 +1,10 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 
 const AuthContext = createContext();
 
 // Set base URL for axios
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -21,17 +20,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
       try {
-        const decoded = jwtDecode(token);
-        if (decoded.exp * 1000 > Date.now()) {
-          setUser(decoded);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        } else {
-          localStorage.removeItem('token');
-        }
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       } catch (error) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
       }
     }
     setLoading(false);
@@ -43,6 +41,7 @@ export const AuthProvider = ({ children }) => {
       const { token, user: userData } = response.data;
       
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(userData);
       
@@ -58,6 +57,7 @@ export const AuthProvider = ({ children }) => {
       const { token, user: newUser } = response.data;
       
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(newUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(newUser);
       
@@ -85,6 +85,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
   };

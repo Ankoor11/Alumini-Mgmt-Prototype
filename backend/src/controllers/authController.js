@@ -25,10 +25,13 @@ const register = async (req, res) => {
       lastName, 
       email, 
       password, 
+      role,
       graduationYear, 
       department,
       currentPosition,
-      company 
+      company,
+      currentYear,
+      rollNumber
     } = req.body;
 
     // Check if user already exists
@@ -37,17 +40,27 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Create new user
-    const user = new User({
+    // Create new user with role-specific fields
+    const userData = {
       firstName,
       lastName,
       email: email.toLowerCase(),
       password,
+      role: role || 'student',
       graduationYear,
-      department,
-      currentPosition,
-      company
-    });
+      department
+    };
+    
+    // Add role-specific fields
+    if (role === 'alumni') {
+      userData.currentPosition = currentPosition;
+      userData.company = company;
+    } else {
+      userData.currentYear = currentYear;
+      userData.rollNumber = rollNumber;
+    }
+    
+    const user = new User(userData);
 
     await user.save();
 
@@ -63,8 +76,12 @@ const register = async (req, res) => {
       role: user.role,
       graduationYear: user.graduationYear,
       department: user.department,
+      studentId: user.studentId,
+      alumniId: user.alumniId,
       currentPosition: user.currentPosition,
-      company: user.company
+      company: user.company,
+      currentYear: user.currentYear,
+      rollNumber: user.rollNumber
     };
 
     res.status(201).json({
@@ -124,8 +141,12 @@ const login = async (req, res) => {
       role: user.role,
       graduationYear: user.graduationYear,
       department: user.department,
+      studentId: user.studentId,
+      alumniId: user.alumniId,
       currentPosition: user.currentPosition,
       company: user.company,
+      currentYear: user.currentYear,
+      rollNumber: user.rollNumber,
       bio: user.bio,
       linkedin: user.linkedin,
       phone: user.phone,

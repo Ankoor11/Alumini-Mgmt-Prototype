@@ -29,6 +29,12 @@ function App() {
     );
   }
 
+  // Determine main content padding based on user state
+  const getMainPadding = () => {
+    if (!user) return '';
+    return user.isDemo === true ? 'pt-28' : 'pt-16';
+  };
+
   return (
     <div className={`min-h-screen theme-container transition-all duration-300 ${
       user?.role === 'student' ? 'student-theme' : user?.role === 'alumni' ? 'alumni-theme' : 'admin-theme'
@@ -46,7 +52,7 @@ function App() {
           </div>
         </div>
       )}
-      <main className={user ? (user?.isDemo ? 'pt-28' : 'pt-16') : ''}}>
+      <main className={getMainPadding()}>
         <Routes>
           {/* Role Selection and Login Routes */}
           <Route path="/role-select" element={!user ? <RoleSelection key="role-select" /> : <Navigate to="/dashboard" />} />

@@ -1,9 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const RoleSelection = () => {
   const { theme, toggleTheme } = useTheme();
+  const { demoLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleDemoLogin = () => {
+    demoLogin();
+    navigate('/dashboard');
+  };
 
   return (
     <div className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
@@ -148,6 +156,57 @@ const RoleSelection = () => {
               </div>
             </div>
           </Link>
+        </div>
+
+        {/* Demo Mode Section */}
+        <div className={`max-w-2xl mx-auto p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white'} mt-12`}>
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mb-4">
+              <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              Try Before You Register
+            </h3>
+            <p className={`text-lg mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+              Explore all the alumni portal features with our interactive demo. No registration required!
+            </p>
+            <ul className={`text-left space-y-2 mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+              <li className="flex items-center">
+                <svg className="w-5 h-5 text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Browse alumni directory with sample profiles
+              </li>
+              <li className="flex items-center">
+                <svg className="w-5 h-5 text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Explore upcoming events and activities
+              </li>
+              <li className="flex items-center">
+                <svg className="w-5 h-5 text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                See mentorship programs in action
+              </li>
+            </ul>
+            <button
+              onClick={handleDemoLogin}
+              className={`w-full flex justify-center items-center py-3 px-6 border-2 text-lg font-medium rounded-md transition-all duration-200 ${
+                theme === 'dark'
+                  ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
+                  : 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
+              }`}
+            >
+              <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1M9 16v-2a3 3 0 013-3h0a3 3 0 013 3v2" />
+              </svg>
+              Launch Demo Experience
+            </button>
+          </div>
         </div>
 
         {/* Registration Link */}

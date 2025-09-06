@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -10,8 +10,9 @@ const AlumniLogin = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   // Clear form data on component mount to ensure fresh login form
   useEffect(() => {
@@ -41,6 +42,11 @@ const AlumniLogin = () => {
     }
     
     setLoading(false);
+  };
+
+  const handleDemoLogin = () => {
+    demoLogin();
+    navigate('/dashboard');
   };
 
   return (
@@ -165,6 +171,32 @@ const AlumniLogin = () => {
             </div>
           </div>
         </form>
+
+        {/* Demo Login Section */}
+        <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white shadow'}`}>
+          <div className="text-center">
+            <h3 className={`text-lg font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              Try it out!
+            </h3>
+            <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+              Explore the alumni portal without creating an account
+            </p>
+            <button
+              onClick={handleDemoLogin}
+              className={`w-full flex justify-center items-center py-3 px-4 border-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                theme === 'dark'
+                  ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
+                  : 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
+              }`}
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Continue as Demo User
+            </button>
+          </div>
+        </div>
 
         {/* Alumni Features Preview */}
         <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white shadow'}`}>

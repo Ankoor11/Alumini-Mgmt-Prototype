@@ -21,15 +21,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
+    const isDemo = localStorage.getItem('isDemo');
     
-    if (token && userData) {
+    if (userData) {
       try {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        // Only set authorization header for non-demo users
+        if (token && !isDemo) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
       } catch (error) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('isDemo');
       }
     }
     setLoading(false);
@@ -87,6 +93,7 @@ export const AuthProvider = ({ children }) => {
     // Clear all authentication-related data
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('isDemo');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
     
@@ -117,12 +124,38 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const demoLogin = () => {
+    const demoUser = {
+      id: 'demo-user-001',
+      name: 'Demo Alumni',
+      email: 'demo@alumni.com',
+      role: 'alumni',
+      isDemo: true,
+      graduationYear: '2020',
+      department: 'Computer Science',
+      company: 'Tech Demo Corp',
+      position: 'Senior Software Engineer',
+      bio: 'This is a demo alumni account showcasing the platform features.',
+      skills: ['JavaScript', 'React', 'Node.js', 'Python'],
+      linkedin: 'https://linkedin.com/in/demo-user',
+      avatar: null
+    };
+    
+    // Store demo user data without token
+    localStorage.setItem('user', JSON.stringify(demoUser));
+    localStorage.setItem('isDemo', 'true');
+    setUser(demoUser);
+    
+    return { success: true };
+  };
+
   const value = {
     user,
     login,
     register,
     logout,
     updateProfile,
+    demoLogin,
     loading
   };
 

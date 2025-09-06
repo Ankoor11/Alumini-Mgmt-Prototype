@@ -34,7 +34,19 @@ function App() {
       user?.role === 'student' ? 'student-theme' : user?.role === 'alumni' ? 'alumni-theme' : 'admin-theme'
     }`}>
       {user && <Navbar />}
-      <main className={user ? 'pt-16' : ''}>
+      {user?.isDemo && (
+        <div className="bg-blue-50 border-b border-blue-200 px-4 py-2 fixed top-16 left-0 right-0 z-40">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-center text-sm text-blue-800">
+              <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              You're viewing the platform in demo mode. All data shown is for demonstration purposes only.
+            </div>
+          </div>
+        </div>
+      )}
+      <main className={user ? (user?.isDemo ? 'pt-28' : 'pt-16') : ''}}>
         <Routes>
           {/* Role Selection and Login Routes */}
           <Route path="/role-select" element={!user ? <RoleSelection key="role-select" /> : <Navigate to="/dashboard" />} />

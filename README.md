@@ -30,29 +30,70 @@ A comprehensive MVP for managing alumni relationships, built with React, Express
 ## 📁 Project Structure
 
 ```
-alumni_mgt/
-├── frontend/                 # React application
+Alumini-Mgmt-Prototype/
+├── frontend/                    # React application
 │   ├── public/
+│   │   └── index.html          # Main HTML template
 │   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   ├── pages/           # Page components
-│   │   ├── contexts/        # React contexts (Auth)
-│   │   ├── services/        # API service functions
-│   │   └── utils/           # Utility functions
-│   └── package.json
-├── backend/                  # Express server
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── Chatbot.js     # AI chatbot component
+│   │   │   └── Navbar.js      # Navigation bar component
+│   │   ├── pages/             # Page components
+│   │   │   ├── AdminDashboard.js      # Admin dashboard
+│   │   │   ├── AlumniDashboard.js     # Alumni dashboard
+│   │   │   ├── AlumniDirectory.js     # Alumni directory listing
+│   │   │   ├── AlumniLogin.js         # Alumni login page
+│   │   │   ├── Dashboard.js           # Main dashboard
+│   │   │   ├── Events.js              # Events management
+│   │   │   ├── Login.js               # General login page
+│   │   │   ├── Mentorship.js          # Mentorship program
+│   │   │   ├── Profile.js             # User profile page
+│   │   │   ├── Register.js            # User registration
+│   │   │   ├── RoleSelection.js       # Role selection page
+│   │   │   ├── StudentDashboard.js    # Student dashboard
+│   │   │   └── StudentLogin.js        # Student login page
+│   │   ├── contexts/          # React contexts
+│   │   │   ├── AuthContext.js # Authentication context
+│   │   │   └── ThemeContext.js # Theme management context
+│   │   ├── services/          # API service functions
+│   │   ├── App.js             # Main App component
+│   │   ├── App.css            # App-specific styles
+│   │   ├── index.js           # Application entry point
+│   │   └── index.css          # Global styles
+│   ├── .env                   # Frontend environment variables
+│   ├── .env.example           # Frontend environment template
+│   ├── package.json           # Frontend dependencies
+│   ├── package-lock.json      # Frontend dependency lock
+│   └── tailwind.config.js     # TailwindCSS configuration
+├── backend/                   # Express.js server
 │   ├── src/
-│   │   ├── controllers/     # Route controllers
-│   │   ├── models/          # MongoDB models
-│   │   ├── middleware/      # Custom middleware
-│   │   ├── routes/          # API routes
-│   │   └── utils/           # Backend utilities
-│   ├── package.json
-│   └── .env                 # Environment variables
-├── database/                # Database setup scripts
-├── docs/                    # Documentation
-├── docker/                  # Docker configuration
-└── README.md
+│   │   ├── controllers/       # Route controllers
+│   │   │   └── authController.js # Authentication controller
+│   │   ├── models/            # MongoDB models
+│   │   │   └── User.js        # User data model
+│   │   ├── middleware/        # Custom middleware
+│   │   │   └── auth.js        # Authentication middleware
+│   │   ├── routes/            # API route definitions
+│   │   │   ├── alumni.js      # Alumni-related routes
+│   │   │   ├── auth.js        # Authentication routes
+│   │   │   ├── dashboard.js   # Dashboard data routes
+│   │   │   ├── events.js      # Event management routes
+│   │   │   └── mentorship.js  # Mentorship program routes
+│   │   └── app.js             # Express app configuration
+│   ├── .env                   # Backend environment variables
+│   ├── .env.example           # Backend environment template
+│   ├── package.json           # Backend dependencies
+│   ├── package-lock.json      # Backend dependency lock
+│   └── backend.log            # Application logs
+├── database/                  # Database setup scripts (empty)
+├── docs/                      # Project documentation (empty)
+├── docker/                    # Docker configuration (empty)
+├── .git/                      # Git version control
+├── .gitattributes            # Git attributes configuration
+├── .gitignore                # Git ignore patterns
+├── package.json              # Root package.json (monorepo scripts)
+├── package-lock.json         # Root dependency lock
+└── README.md                 # Project documentation
 ```
 
 ## 🚀 Quick Start
